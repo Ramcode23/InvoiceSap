@@ -1,0 +1,66 @@
+<div class="invoice_container">
+  <mat-card>
+    <mat-card-title>Invoice</mat-card-title>
+    <form class="example-form"  [formGroup]="invoiceForm">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Company</mat-label>
+        <input formControlName="company" type="text" matInput  [matAutocomplete]="auto" (keyup)="filter(myControl.value)">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let option of filteredOptions |async" [value]="option">
+            {{option.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Date</mat-label>
+        <input formControlName="invoiceDate" type="date" matInput >
+      </mat-form-field>
+
+      <p>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Description</mat-label>
+          <textarea formControlName="description" matInput placeholder="Ex. 100 Main St">1600 Amphitheatre Pkwy</textarea>
+        </mat-form-field>
+      </p>
+      <mat-divider></mat-divider>
+
+      <mat-card>
+        <ng-container formArrayName="invoiceLines" >
+          <ng-container *ngFor="let invoiceLine of invoiceLines.controls; let i=index">
+            <div class="container" [formGroupName]="i">
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Decription</mat-label>
+                  <input formControlName="description" matInput placeholder="Product Description">
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Price</mat-label>
+                  <input (keyup)="getTotal()" formControlName="price" type="number" matInput placeholder="0$">
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Quality</mat-label>
+                  <input (keyup)="getTotal()" formControlName="quality" type="number" matInput  placeholder="0.0">
+                </mat-form-field>
+                <mat-divider></mat-divider>
+                <button (click)="removeInvoiceLine(i)" mat-icon-button color="warn" aria-label="Example icon button with a home icon">
+                  <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+          </ng-container>
+          </ng-container>
+      </mat-card>
+    </form>
+    <mat-card-actions>
+      <button class="btn_invoice" mat-button color="primary"(click)="addInvoiceLine()">Add New Item</button>
+    </mat-card-actions>
+    <mat-card>
+      <mat-card-title>Total:{{total|currency}}</mat-card-title>
+    </mat-card>
+    <button class="btn_invoice" mat-raised-button color="primary" (click)="saveinvoice()">Save</button>
+  </mat-card>
+</div>
+
+
